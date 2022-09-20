@@ -6,10 +6,13 @@ set(CMAKE_CXX_STANDARD 23)
 set(PROJECT_HEADERS
         tinyxml2.h
         olcPixelGameEngine.h
-        Grid.h)
+        Grid.h
+        Pathfinder.h)
+
 set(PROJECT_SOURCES
         main.cpp
         tinyxml2.cpp
-        Grid.cpp)
+        Grid.cpp
+        Pathfinder.cpp)
 
 add_executable(Pathfinding ${PROJECT_SOURCES} ${PROJECT_HEADERS})

@@ -5,19 +5,7 @@
 #include <tuple>
 #include <queue>
 #include <map>
-
-struct TaskConfiguration {
-    int start_i;
-    int start_j;
-
-    int goal_i;
-    int goal_j;
-
-    std::string metricType;
-    std::string algorithm;
-    int connections;
-    float hweight;
-};
+#include "Pathfinder.h"
 
 std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
     tinyxml2::XMLDocument doc;
@@ -71,51 +59,6 @@ std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
     return std::make_tuple(taskConfiguration, grid);
 }
 
-std::map<int, int> TraverseGrid(const TaskConfiguration &taskConfiguration, const Grid &grid) {
-    std::queue<int> queue;
-    std::map<int, int> parents;
-
-    int start = grid.GetCellIndex(taskConfiguration.start_i, taskConfiguration.start_j);
-    int goal = grid.GetCellIndex(taskConfiguration.goal_i, taskConfiguration.goal_j);
-
-    queue.push(start);
-    parents[start] = -1;
-
-    while (!queue.empty()) {
-        int current = queue.front();
-        queue.pop();
-
-        if (current == goal) {
-            break;
-        }
-
-        for (int next: grid.GetNeighbors(current)) {
-            if (grid.IsCellTraversable(current) && parents.find(next) == parents.end()) {
-                queue.push(next);
-                parents[next] = current;
-            }
-        }
-    }
-
-    return parents;
-}
-
-std::vector<int> ReconstructPath(const std::map<int, int> &parents, int goal) {
-    std::vector<int> path;
-    int current = goal;
-    while (current != -1) {
-        path.push_back(current);
-        current = parents.at(current);
-    }
-    std::reverse(path.begin(), path.end());
-    return path;
-}
-
-std::vector<int> FindPath(const TaskConfiguration &taskConfiguration, const Grid &grid) {
-    auto parents = TraverseGrid(taskConfiguration, grid);
-    return ReconstructPath(parents, grid.GetCellIndex(taskConfiguration.goal_i, taskConfiguration.goal_j));
-}
-
 int main(int argc, char **argv) {
     if (argc < 2) {
         std::cout << "Usage: " << argv[0] << " <document>" << std::endl;
@@ -135,7 +78,9 @@ int main(int argc, char **argv) {
     std::cout << "\tConnections: " << taskConfiguration.connections << std::endl;
     std::cout << "\tHweight: " << taskConfiguration.hweight << std::endl << std::endl;
 
-    auto path = FindPath(std::get<0>(data), std::get<1>(data));
+    auto pathfinder = Pathfinder(taskConfiguration, grid);
+    auto path = pathfinder.FindPath();
+
     grid.VisualisePath(path);
 
     return 0;
