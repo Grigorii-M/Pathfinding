@@ -2,7 +2,6 @@
 #include <utility>
 #include "Pathfinder.h"
 #include "SmartQueue.h"
-#include <iostream>
 
 Pathfinder::Pathfinder(TaskConfiguration taskConfiguration, const Grid &grid) : grid(grid), taskConfiguration(
         std::move(taskConfiguration)) {}
@@ -44,19 +43,20 @@ std::map<int, int> Pathfinder::TraverseGrid() {
     // Determine the cost function
     int bfsOrder = 0;
     std::map<int, double> cellCosts;
-    SmartQueue queue;
+    std::function<double (int)> priorityFunction;
     if (taskConfiguration.algorithm == "Dijkstra") {
-        queue = SmartQueue([&cellCosts](int cell) { return cellCosts[cell]; });
+        priorityFunction = [&cellCosts](int cell) { return cellCosts[cell]; };
     } else if (taskConfiguration.algorithm == "AStar") {
-        queue = SmartQueue(
+        priorityFunction =
                 [&cellCosts, &goal, &hweight = this->taskConfiguration.hweight, &heuristicFunction](int cell) {
                     return cellCosts[cell] + hweight * heuristicFunction(cell, goal);
-                });
+                };
     } else { // BFS
-        queue = SmartQueue([&bfsOrder](int cell) { return bfsOrder++; });
+        priorityFunction = [&bfsOrder](int cell) { return bfsOrder++; };
     }
 
-    queue.Push(start);
+    SmartQueue queue;
+    queue.Push(start, priorityFunction(start));
 
     std::map<int, int> parents;
     parents[start] = -1;
@@ -77,7 +77,7 @@ std::map<int, int> Pathfinder::TraverseGrid() {
             }
 
             if (grid.IsCellTraversable(current) && parents.find(next) == parents.end()) {
-                queue.Push(next);
+                queue.Push(next, priorityFunction(next));
                 parents[next] = current;
             }
         }

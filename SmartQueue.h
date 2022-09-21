@@ -4,15 +4,14 @@
 #include <tuple>
 #include <functional>
 
+/// A priority queue that allows
 class SmartQueue {
 private:
-    std::priority_queue<std::tuple<double, int>, std::vector<std::tuple<double, int>>, std::function<bool(std::tuple<double, int>, std::tuple<double, int>)>> queue; // (priority, cell)
-    std::function<double (int)> priorityFunction;
+    std::priority_queue<std::tuple<int, double>, std::vector<std::tuple<int, double>>, std::function<bool(std::tuple<int, double>, std::tuple<int, double>)>> queue; // (priority, cell)
 
 public:
-    SmartQueue() = default;
-    explicit SmartQueue(std::function<double (int)> priorityFunction);
-    void Push(int cell);
+    SmartQueue();
+    void Push(int cell, double priority);
     int Pop();
     bool Empty();
 };

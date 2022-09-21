@@ -9,6 +9,7 @@
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 
+/// Parse the XML file and return the task configuration and the grid
 std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
     tinyxml2::XMLDocument doc;
     doc.LoadFile(argv[1]);
@@ -44,23 +45,24 @@ std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
 
     // Create a grid, fill it with obstacles
     Grid grid(width, height, connections);
-    int curi = 0;
-    for (auto row = map->FirstChildElement(); row != nullptr; row = row->NextSiblingElement(), curi++) {
+    int i = 0;
+    for (auto row = map->FirstChildElement(); row != nullptr; row = row->NextSiblingElement(), i++) {
         std::string values = row->GetText();
-        int curj = 0;
+        int j = 0;
         for (char value: values) {
             if (value == ' ') {
                 continue;
             } else {
-                grid.SetCell(curi, curj, value != '1');
+                grid.SetCell(i, j, value != '1');
             }
-            curj++;
+            j++;
         }
     }
 
     return std::make_tuple(taskConfiguration, grid);
 }
 
+/// This class is used to visualize the grid and the path
 class Application : public olc::PixelGameEngine {
 private:
     Pathfinder pathfinder;
@@ -139,6 +141,7 @@ int main(int argc, char **argv) {
     auto taskConfiguration = std::get<0>(data);
     auto grid = std::get<1>(data);
 
+    // Print config to console
     std::cout << "Config" << std::endl;
     std::cout << "\tGrid: " << grid.GetWidth() << "x" << grid.GetHeight() << std::endl;
     std::cout << "\tStart: " << taskConfiguration.start_i << ", " << taskConfiguration.start_j << std::endl;
