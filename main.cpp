@@ -6,7 +6,9 @@
 #include "Pathfinder.h"
 #include <chrono>
 #include <utility>
+
 #define OLC_PGE_APPLICATION
+
 #include "olcPixelGameEngine.h"
 
 /// Parse the XML file and return the task configuration and the grid
@@ -73,13 +75,13 @@ private:
     int goal_j;
 
 public:
-    Application(Pathfinder pathfinder, Grid grid, int start_i, int start_j, int goal_i, int goal_j) : pathfinder(std::move(pathfinder)), grid(grid), start_i(start_i), start_j(start_j), goal_i(goal_i), goal_j(goal_j) {
+    Application(Pathfinder pathfinder, Grid grid, int start_i, int start_j, int goal_i, int goal_j) : pathfinder(
+            std::move(pathfinder)), grid(grid), start_i(start_i), start_j(start_j), goal_i(goal_i), goal_j(goal_j) {
         sAppName = "Pathfinder";
     }
 
 public:
-    bool OnUserCreate() override
-    {
+    bool OnUserCreate() override {
         Clear(olc::BLACK);
         for (int i = 0; i < grid.GetHeight(); i++) {
             for (int j = 0; j < grid.GetWidth(); j++) {
@@ -99,8 +101,7 @@ public:
         return true;
     }
 
-    bool OnUserUpdate(float fElapsedTime) override
-    {
+    bool OnUserUpdate(float fElapsedTime) override {
         if (GetKey(olc::Key::ENTER).bPressed) {
             auto start = std::chrono::high_resolution_clock::now();
             auto path = pathfinder.FindPath();
@@ -153,7 +154,8 @@ int main(int argc, char **argv) {
 
     Pathfinder pathfinder(taskConfiguration, grid);
 
-    Application app(pathfinder, grid, taskConfiguration.start_i, taskConfiguration.start_j, taskConfiguration.goal_i, taskConfiguration.goal_j);
+    Application app(pathfinder, grid, taskConfiguration.start_i, taskConfiguration.start_j, taskConfiguration.goal_i,
+                    taskConfiguration.goal_j);
     if (app.Construct(grid.GetWidth(), grid.GetHeight(), 5, 5))
         app.Start();
 

@@ -10,7 +10,7 @@ SmartQueue::SmartQueue() {
             std::tuple<int, double>,
             std::vector<std::tuple<int, double>>,
             std::function<bool(std::tuple<int, double>, std::tuple<int, double>)>
-    > {comparator};
+    >{comparator};
 }
 
 void SmartQueue::Push(int cell, double priority) {

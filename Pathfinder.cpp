@@ -44,7 +44,7 @@ std::map<int, int> Pathfinder::TraverseGrid() {
     // Determine the cost function
     int bfsOrder = 0;
     std::map<int, double> cellCosts;
-    std::function<double (int)> priorityFunction;
+    std::function<double(int)> priorityFunction;
     if (taskConfiguration.algorithm == "Dijkstra") {
         priorityFunction = [&cellCosts](int cell) { return cellCosts[cell]; };
     } else if (taskConfiguration.algorithm == "AStar") {
