@@ -22,6 +22,30 @@ bool Grid::IsCellTraversable(int cell) const {
     return data[cell];
 }
 
+bool Grid::IsCellTraversableFrom(int curr, int next) const {
+    bool destinationIsTraversable = data[next];
+    if (!destinationIsTraversable) {
+        return false;
+    }
+
+    int start_i = curr / width;
+    int start_j = curr % width;
+
+    int next_i = next / width;
+    int next_j = next % width;
+
+    if (neighbors_count != 4) {
+        int di = next_i - start_i;
+        int dj = next_j - start_j;
+
+        bool isDiagonalPathOpen = data[curr + di * width] || data[curr + dj];
+
+        return isDiagonalPathOpen;
+    }
+
+    return true;
+}
+
 void Grid::SetCell(int i, int j, bool value) {
     data[i * width + j] = value;
 }

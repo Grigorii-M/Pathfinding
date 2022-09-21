@@ -1,5 +1,6 @@
 #include <queue>
 #include <utility>
+#include <iostream>
 #include "Pathfinder.h"
 #include "SmartQueue.h"
 
@@ -76,7 +77,7 @@ std::map<int, int> Pathfinder::TraverseGrid() {
                 continue;
             }
 
-            if (grid.IsCellTraversable(current) && parents.find(next) == parents.end()) {
+            if (grid.IsCellTraversableFrom(current, next) && parents.find(next) == parents.end()) {
                 queue.Push(next, priorityFunction(next));
                 parents[next] = current;
             }
