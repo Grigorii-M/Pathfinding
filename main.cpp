@@ -3,9 +3,11 @@
 #include "tinyxml2.h"
 #include "Grid.h"
 #include <tuple>
-#include <queue>
-#include <map>
 #include "Pathfinder.h"
+#include <chrono>
+#include <utility>
+#define OLC_PGE_APPLICATION
+#include "olcPixelGameEngine.h"
 
 std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
     tinyxml2::XMLDocument doc;
@@ -59,6 +61,74 @@ std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
     return std::make_tuple(taskConfiguration, grid);
 }
 
+class Application : public olc::PixelGameEngine {
+private:
+    Pathfinder pathfinder;
+    Grid grid;
+    int start_i;
+    int start_j;
+    int goal_i;
+    int goal_j;
+
+public:
+    Application(Pathfinder pathfinder, Grid grid, int start_i, int start_j, int goal_i, int goal_j) : pathfinder(std::move(pathfinder)), grid(grid), start_i(start_i), start_j(start_j), goal_i(goal_i), goal_j(goal_j) {
+        sAppName = "Pathfinder";
+    }
+
+public:
+    bool OnUserCreate() override
+    {
+        Clear(olc::BLACK);
+        for (int i = 0; i < grid.GetHeight(); i++) {
+            for (int j = 0; j < grid.GetWidth(); j++) {
+                if (grid.IsCellTraversable(grid.GetCellIndex(i, j))) {
+                    Draw(j, i, olc::GREY);
+                } else {
+                    Draw(j, i, olc::RED);
+                }
+
+                if (i == start_i && j == start_j) {
+                    Draw(j, i, olc::MAGENTA);
+                } else if (i == goal_i && j == goal_j) {
+                    Draw(j, i, olc::CYAN);
+                }
+            }
+        }
+        return true;
+    }
+
+    bool OnUserUpdate(float fElapsedTime) override
+    {
+        if (GetKey(olc::Key::ENTER).bPressed) {
+            auto start = std::chrono::high_resolution_clock::now();
+            auto path = pathfinder.FindPath();
+            auto end = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> elapsed = end - start;
+            std::cout << "Elapsed time: " << elapsed.count() << "s" << std::endl;
+            Clear(olc::BLACK);
+            for (int i = 0; i < grid.GetHeight(); i++) {
+                for (int j = 0; j < grid.GetWidth(); j++) {
+                    if (std::find(path.begin(), path.end(), grid.GetCellIndex(i, j)) != path.end()) {
+                        Draw(j, i, olc::GREEN);
+                    } else if (grid.IsCellTraversable(grid.GetCellIndex(i, j))) {
+                        Draw(j, i, olc::GREY);
+                    } else {
+                        Draw(j, i, olc::RED);
+                    }
+
+                    if (i == start_i && j == start_j) {
+                        Draw(j, i, olc::MAGENTA);
+                    } else if (i == goal_i && j == goal_j) {
+                        Draw(j, i, olc::CYAN);
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+};
+
 int main(int argc, char **argv) {
     if (argc < 2) {
         std::cout << "Usage: " << argv[0] << " <document>" << std::endl;
@@ -78,10 +148,11 @@ int main(int argc, char **argv) {
     std::cout << "\tConnections: " << taskConfiguration.connections << std::endl;
     std::cout << "\tHweight: " << taskConfiguration.hweight << std::endl << std::endl;
 
-    auto pathfinder = Pathfinder(taskConfiguration, grid);
-    auto path = pathfinder.FindPath();
+    Pathfinder pathfinder(taskConfiguration, grid);
 
-    grid.VisualisePath(path);
+    Application app(pathfinder, grid, taskConfiguration.start_i, taskConfiguration.start_j, taskConfiguration.goal_i, taskConfiguration.goal_j);
+    if (app.Construct(grid.GetWidth(), grid.GetHeight(), 5, 5))
+        app.Start();
 
     return 0;
 }
