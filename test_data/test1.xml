@@ -50,7 +50,7 @@
 		<row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
 		<row>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 </row>
 	</map>
-	<options metrictype="Euclidean" algorithm="BFS" connections="4" hweight="1"/>
+	<options metrictype="Euclidean" algorithm="Dijkstra" connections="4" hweight="1"/>
 	<!-- metrictype - Euclidean, Manhattan, Octile-->
 	<!-- algorithm - AStar, Dijkstra, BFS-->
 	<!-- connections - 4,8 -->
