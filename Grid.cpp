@@ -2,8 +2,8 @@
 #include <iostream>
 #include "Grid.h"
 
-Grid::Grid(int width, int height, int neighbors_count) : width(width), height(height),
-                                                         neighbors_count(neighbors_count) {
+Grid::Grid(int width, int height, int neighborsCount) : width(width), height(height),
+                                                         neighborsCount(neighborsCount) {
     data = new bool[width * height];
     for (int i = 0; i < width * height; i++) {
         data[i] = true;
@@ -34,7 +34,7 @@ bool Grid::IsCellTraversableFrom(int curr, int next) const {
     int next_i = next / width;
     int next_j = next % width;
 
-    if (neighbors_count != 4) {
+    if (neighborsCount == 8) {
         int di = next_i - start_i;
         int dj = next_j - start_j;
 
@@ -74,7 +74,7 @@ std::vector<int> Grid::GetNeighbors(int cell) const {
         neighbors.push_back(cell + 1);
     }
 
-    if (neighbors_count == 8) {
+    if (neighborsCount == 8) {
         // North-West
         if (cell - width >= 0 && cell % width != 0) {
             neighbors.push_back(cell - width - 1);
