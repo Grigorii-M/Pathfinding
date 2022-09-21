@@ -66,6 +66,10 @@ std::map<int, int> Pathfinder::TraverseGrid() {
     std::map<int, int> parents;
     parents[start] = -1;
 
+    if (!grid.IsCellTraversable(start)) {
+        return {};
+    }
+
     while (!queue.empty()) {
         int current = std::get<0>(queue.top());
         queue.pop();
@@ -89,7 +93,7 @@ std::map<int, int> Pathfinder::TraverseGrid() {
         }
     }
 
-    return parents;
+    return std::map<int, int> {parents};
 }
 
 std::vector<int> Pathfinder::ReconstructPath(std::map<int, int> parents) {
@@ -97,6 +101,9 @@ std::vector<int> Pathfinder::ReconstructPath(std::map<int, int> parents) {
     int current = grid.GetCellIndex(taskConfiguration.goal_i, taskConfiguration.goal_j);
     while (current != -1) {
         path.push_back(current);
+        if (parents.find(current) == parents.end()) {
+            return {};
+        }
         current = parents.at(current);
     }
     std::reverse(path.begin(), path.end());

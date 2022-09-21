@@ -3,6 +3,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <optional>
 #include "Grid.h"
 
 struct TaskConfiguration {
