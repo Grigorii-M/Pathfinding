@@ -1,8 +1,7 @@
 #include <queue>
 #include <utility>
-#include <iostream>
 #include "Pathfinder.h"
-#include "SmartQueue.h"
+#include <functional>
 
 Pathfinder::Pathfinder(TaskConfiguration taskConfiguration, const Grid &grid) : grid(grid), taskConfiguration(
         std::move(taskConfiguration)) {}
@@ -41,7 +40,7 @@ std::map<int, int> Pathfinder::TraverseGrid() {
         };
     }
 
-    // Determine the cost function
+    // Determine the priority function
     int bfsOrder = 0;
     std::map<int, double> cellCosts;
     std::function<double(int)> priorityFunction;
@@ -56,14 +55,20 @@ std::map<int, int> Pathfinder::TraverseGrid() {
         priorityFunction = [&bfsOrder](int cell) { return bfsOrder++; };
     }
 
-    SmartQueue queue;
-    queue.Push(start, priorityFunction(start));
+    auto comparator = [&](std::tuple<double, int> a, std::tuple<double, int> b) {
+        return std::get<1>(a) > std::get<1>(b);
+    };
+
+    auto queue = std::priority_queue<std::tuple<int, double>, std::vector<std::tuple<int, double>>, decltype(comparator)>{comparator};
+
+    queue.push(std::make_tuple(start, priorityFunction(start)));
 
     std::map<int, int> parents;
     parents[start] = -1;
 
-    while (!queue.Empty()) {
-        int current = queue.Pop();
+    while (!queue.empty()) {
+        int current = std::get<0>(queue.top());
+        queue.pop();
 
         if (current == goal) {
             break;
@@ -78,7 +83,7 @@ std::map<int, int> Pathfinder::TraverseGrid() {
             }
 
             if (grid.IsCellTraversableFrom(current, next) && parents.find(next) == parents.end()) {
-                queue.Push(next, priorityFunction(next));
+                queue.push(std::make_tuple(next, priorityFunction(next)));
                 parents[next] = current;
             }
         }

@@ -7,10 +7,10 @@ private:
     int width; // j
     int height; // i
     bool *data; // true - traversable, false - obstacle
-    int neighbors_count; // how many neighbors each cell has
+    int neighborsCount; // how many neighbors each cell has
 
 public:
-    Grid(int width, int height, int neighbors_count);
+    Grid(int width, int height, int neighborsCount);
 
     [[nodiscard]] int GetWidth() const;
 
