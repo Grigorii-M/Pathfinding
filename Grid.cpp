@@ -28,13 +28,13 @@ bool Grid::IsCellTraversableFrom(int curr, int next) const {
         return false;
     }
 
-    int start_i = curr / width;
-    int start_j = curr % width;
-
-    int next_i = next / width;
-    int next_j = next % width;
-
     if (neighborsCount == 8) {
+        int start_i = curr / width;
+        int start_j = curr % width;
+
+        int next_i = next / width;
+        int next_j = next % width;
+
         int di = next_i - start_i;
         int dj = next_j - start_j;
 
