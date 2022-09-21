@@ -7,12 +7,16 @@ set(PROJECT_HEADERS
         tinyxml2.h
         olcPixelGameEngine.h
         Grid.h
-        Pathfinder.h)
+        Pathfinder.h
+        SmartQueue.h
+        )
 
 set(PROJECT_SOURCES
         main.cpp
         tinyxml2.cpp
         Grid.cpp
-        Pathfinder.cpp)
+        Pathfinder.cpp
+        SmartQueue.cpp
+        )
 
 add_executable(Pathfinding ${PROJECT_SOURCES} ${PROJECT_HEADERS})

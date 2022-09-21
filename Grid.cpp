@@ -79,17 +79,16 @@ int Grid::GetCellIndex(int i, int j) const {
     return i * width + j;
 }
 
-void Grid::VisualisePath(const std::vector<int> &path) const {
-    for (int i = 0; i < width * height; i++) {
-        if (std::find(path.begin(), path.end(), i) != path.end()) {
-            std::cout << "X";
-        } else if (data[i]) {
-            std::cout << "_";
-        } else {
-            std::cout << "#";
-        }
-        if (i % width == width - 1) {
-            std::cout << std::endl;
-        }
-    }
+double Grid::Cost(int cell1, int cell2) const {
+    int x1 = cell1 % width;
+    int y1 = cell1 / width;
+
+    int x2 = cell2 % width;
+    int y2 = cell2 / width;
+
+    return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+}
+
+std::tuple<int, int> Grid::GetCellCoordinates(int cell) const {
+    return std::make_tuple(cell / width, cell % width);
 }

@@ -10,11 +10,13 @@ private:
 
 public:
     Grid(int width, int height, int neighbors_count);
-    int GetWidth() const;
-    int GetHeight() const;
-    bool IsCellTraversable(int cell) const;
+    [[nodiscard]] int GetWidth() const;
+    [[nodiscard]] int GetHeight() const;
+    [[nodiscard]] bool IsCellTraversable(int cell) const;
     void SetCell(int i, int j, bool value);
-    std::vector<int> GetNeighbors(int cell) const;
-    int GetCellIndex(int i, int j) const;
-    void VisualisePath(const std::vector<int> &path) const;
+    [[nodiscard]] std::vector<int> GetNeighbors(int cell) const;
+    [[nodiscard]] int GetCellIndex(int i, int j) const;
+    [[nodiscard]] double Cost(int cell1, int cell2) const;
+    /// Returns the cell's i and j coordinates
+    [[nodiscard]] std::tuple<int, int> GetCellCoordinates(int cell) const;
 };
