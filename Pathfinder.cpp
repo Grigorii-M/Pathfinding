@@ -2,6 +2,8 @@
 #include <utility>
 #include "Pathfinder.h"
 #include <functional>
+#include <cmath>
+#include <iostream>
 
 Pathfinder::Pathfinder(TaskConfiguration taskConfiguration, const Grid &grid) : grid(grid), taskConfiguration(
         std::move(taskConfiguration)) {}
@@ -80,13 +82,9 @@ std::map<int, int> Pathfinder::TraverseGrid() {
 
         for (int next: grid.GetNeighbors(current)) {
             double cost = cellCosts[current] + grid.Cost(current, next);
-            if (cellCosts.find(next) == cellCosts.end() || cost < cellCosts[next]) {
-                cellCosts[next] = cost;
-            } else {
-                continue;
-            }
 
-            if (grid.IsCellTraversableFrom(current, next) && parents.find(next) == parents.end()) {
+            if (grid.IsCellTraversableFrom(current, next) && (cellCosts.find(next) == cellCosts.end() || cost < cellCosts[next])) {
+                cellCosts[next] = cost;
                 queue.push(std::make_tuple(next, priorityFunction(next)));
                 parents[next] = current;
             }

@@ -4,7 +4,6 @@
 #include "Grid.h"
 #include <tuple>
 #include "Pathfinder.h"
-#include <chrono>
 #include <utility>
 
 #define OLC_PGE_APPLICATION
@@ -103,11 +102,8 @@ public:
 
     bool OnUserUpdate(float fElapsedTime) override {
         if (GetKey(olc::Key::ENTER).bPressed) {
-            auto start = std::chrono::high_resolution_clock::now();
             auto path = pathfinder.FindPath();
-            auto end = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> elapsed = end - start;
-            std::cout << "Elapsed time: " << elapsed.count() << "s" << std::endl;
+
             Clear(olc::BLACK);
             for (int i = 0; i < grid.GetHeight(); i++) {
                 for (int j = 0; j < grid.GetWidth(); j++) {

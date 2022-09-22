@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <cmath>
+#include <tuple>
 #include "Grid.h"
 
 Grid::Grid(int width, int height, int neighborsCount) : width(width), height(height),
@@ -37,6 +39,10 @@ bool Grid::IsCellTraversableFrom(int curr, int next) const {
 
         int di = next_i - start_i;
         int dj = next_j - start_j;
+
+        if (di == 0 || dj == 0) {
+            return true;
+        }
 
         bool isDiagonalPathOpen = data[curr + di * width] || data[curr + dj];
 
