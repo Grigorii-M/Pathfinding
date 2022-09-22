@@ -103,22 +103,10 @@ public:
     bool OnUserUpdate(float fElapsedTime) override {
         if (GetKey(olc::Key::ENTER).bPressed) {
             auto path = pathfinder.FindPath();
-
-            Clear(olc::BLACK);
             for (int i = 0; i < grid.GetHeight(); i++) {
                 for (int j = 0; j < grid.GetWidth(); j++) {
                     if (std::find(path.begin(), path.end(), grid.GetCellIndex(i, j)) != path.end()) {
                         Draw(j, i, olc::GREEN);
-                    } else if (grid.IsCellTraversable(grid.GetCellIndex(i, j))) {
-                        Draw(j, i, olc::GREY);
-                    } else {
-                        Draw(j, i, olc::RED);
-                    }
-
-                    if (i == start_i && j == start_j) {
-                        Draw(j, i, olc::MAGENTA);
-                    } else if (i == goal_i && j == goal_j) {
-                        Draw(j, i, olc::CYAN);
                     }
                 }
             }

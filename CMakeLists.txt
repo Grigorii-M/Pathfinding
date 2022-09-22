@@ -19,4 +19,14 @@ set(PROJECT_SOURCES
 
 add_executable(Pathfinding ${PROJECT_SOURCES} ${PROJECT_HEADERS})
 
-target_link_libraries(Pathfinding user32 gdi32 opengl32 gdiplus Shlwapi dwmapi stdc++fs)
+set(LIBRARIES
+        user32
+        gdi32
+        opengl32
+        gdiplus
+        Shlwapi
+        dwmapi
+        stdc++fs
+        )
+
+target_link_libraries(Pathfinding ${LIBRARIES})
