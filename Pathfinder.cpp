@@ -3,7 +3,6 @@
 #include "Pathfinder.h"
 #include <functional>
 #include <cmath>
-#include <iostream>
 
 Pathfinder::Pathfinder(TaskConfiguration taskConfiguration, const Grid &grid) : grid(grid), taskConfiguration(
         std::move(taskConfiguration)) {}
