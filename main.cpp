@@ -108,6 +108,12 @@ public:
                     if (std::find(path.begin(), path.end(), grid.GetCellIndex(i, j)) != path.end()) {
                         Draw(j, i, olc::GREEN);
                     }
+
+                    if (i == start_i && j == start_j) {
+                        Draw(j, i, olc::MAGENTA);
+                    } else if (i == goal_i && j == goal_j) {
+                        Draw(j, i, olc::CYAN);
+                    }
                 }
             }
         }
