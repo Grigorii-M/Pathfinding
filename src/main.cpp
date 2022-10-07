@@ -5,6 +5,7 @@
 #include <tuple>
 #include "Pathfinder.h"
 #include <utility>
+#include "../maze_generator/ffi/lib.rs.h"
 
 #define OLC_PGE_APPLICATION
 

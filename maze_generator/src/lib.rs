@@ -1,5 +1,12 @@
 use rand::{thread_rng, Rng};
 
+#[cxx::bridge]
+pub mod ffi {
+    extern "Rust" {
+        pub fn get_maze(width: u32, height: u32) -> Vec<bool>;
+    }
+}
+
 #[derive(Debug, PartialEq)]
 pub struct MazeCell {
     x: u32,
@@ -9,6 +16,12 @@ pub struct MazeCell {
     south: bool,
     east: bool,
     west: bool,
+}
+
+/// Resulting maze's dimensions are three times bigger than the parameters
+pub fn get_maze(width: u32, height: u32) -> Vec<bool> {
+    let maze = generate_maze(width, height);
+    convert_maze(maze, width, height)
 }
 
 pub fn generate_maze(width: u32, height: u32) -> Vec<MazeCell> {
