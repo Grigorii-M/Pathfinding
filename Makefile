@@ -129,77 +129,101 @@ Pathfinding/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/build
 .PHONY : Pathfinding/fast
 
-Grid.o: Grid.cpp.o
-.PHONY : Grid.o
+src/Grid.o: src/Grid.cpp.o
+.PHONY : src/Grid.o
 
 # target to build an object file
-Grid.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/Grid.cpp.o
-.PHONY : Grid.cpp.o
+src/Grid.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/Grid.cpp.o
+.PHONY : src/Grid.cpp.o
 
-Grid.i: Grid.cpp.i
-.PHONY : Grid.i
+src/Grid.i: src/Grid.cpp.i
+.PHONY : src/Grid.i
 
 # target to preprocess a source file
-Grid.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/Grid.cpp.i
-.PHONY : Grid.cpp.i
+src/Grid.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/Grid.cpp.i
+.PHONY : src/Grid.cpp.i
 
-Grid.s: Grid.cpp.s
-.PHONY : Grid.s
+src/Grid.s: src/Grid.cpp.s
+.PHONY : src/Grid.s
 
 # target to generate assembly for a file
-Grid.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/Grid.cpp.s
-.PHONY : Grid.cpp.s
+src/Grid.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/Grid.cpp.s
+.PHONY : src/Grid.cpp.s
 
-Pathfinder.o: Pathfinder.cpp.o
-.PHONY : Pathfinder.o
+src/Pathfinder.o: src/Pathfinder.cpp.o
+.PHONY : src/Pathfinder.o
 
 # target to build an object file
-Pathfinder.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/Pathfinder.cpp.o
-.PHONY : Pathfinder.cpp.o
+src/Pathfinder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/Pathfinder.cpp.o
+.PHONY : src/Pathfinder.cpp.o
 
-Pathfinder.i: Pathfinder.cpp.i
-.PHONY : Pathfinder.i
+src/Pathfinder.i: src/Pathfinder.cpp.i
+.PHONY : src/Pathfinder.i
 
 # target to preprocess a source file
-Pathfinder.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/Pathfinder.cpp.i
-.PHONY : Pathfinder.cpp.i
+src/Pathfinder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/Pathfinder.cpp.i
+.PHONY : src/Pathfinder.cpp.i
 
-Pathfinder.s: Pathfinder.cpp.s
-.PHONY : Pathfinder.s
+src/Pathfinder.s: src/Pathfinder.cpp.s
+.PHONY : src/Pathfinder.s
 
 # target to generate assembly for a file
-Pathfinder.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/Pathfinder.cpp.s
-.PHONY : Pathfinder.cpp.s
+src/Pathfinder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/Pathfinder.cpp.s
+.PHONY : src/Pathfinder.cpp.s
 
-main.o: main.cpp.o
-.PHONY : main.o
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/main.cpp.o
-.PHONY : main.cpp.o
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/main.cpp.i
-.PHONY : main.cpp.i
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/main.cpp.s
-.PHONY : main.cpp.s
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
+
+src/tinyxml2.o: src/tinyxml2.cpp.o
+.PHONY : src/tinyxml2.o
+
+# target to build an object file
+src/tinyxml2.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/tinyxml2.cpp.o
+.PHONY : src/tinyxml2.cpp.o
+
+src/tinyxml2.i: src/tinyxml2.cpp.i
+.PHONY : src/tinyxml2.i
+
+# target to preprocess a source file
+src/tinyxml2.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/tinyxml2.cpp.i
+.PHONY : src/tinyxml2.cpp.i
+
+src/tinyxml2.s: src/tinyxml2.cpp.s
+.PHONY : src/tinyxml2.s
+
+# target to generate assembly for a file
+src/tinyxml2.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Pathfinding.dir/build.make CMakeFiles/Pathfinding.dir/src/tinyxml2.cpp.s
+.PHONY : src/tinyxml2.cpp.s
 
 # Help Target
 help:
@@ -210,15 +234,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Pathfinding"
-	@echo "... Grid.o"
-	@echo "... Grid.i"
-	@echo "... Grid.s"
-	@echo "... Pathfinder.o"
-	@echo "... Pathfinder.i"
-	@echo "... Pathfinder.s"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... src/Grid.o"
+	@echo "... src/Grid.i"
+	@echo "... src/Grid.s"
+	@echo "... src/Pathfinder.o"
+	@echo "... src/Pathfinder.i"
+	@echo "... src/Pathfinder.s"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
+	@echo "... src/tinyxml2.o"
+	@echo "... src/tinyxml2.i"
+	@echo "... src/tinyxml2.s"
 .PHONY : help
 
 
