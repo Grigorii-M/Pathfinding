@@ -11,6 +11,8 @@
 
 #include "olcPixelGameEngine.h"
 
+std::tuple<TaskConfiguration, Grid> GenerateTask();
+
 /// This class is used to visualize the grid and the path
 class Application : public olc::PixelGameEngine {
 private:
@@ -20,11 +22,13 @@ private:
     int start_j;
     int goal_i;
     int goal_j;
+    bool mazeSolved;
 
 public:
     Application(Pathfinder pathfinder, Grid grid, int start_i, int start_j, int goal_i, int goal_j) : pathfinder(
             std::move(pathfinder)), grid(grid), start_i(start_i), start_j(start_j), goal_i(goal_i), goal_j(goal_j) {
         sAppName = "Pathfinder";
+        this->mazeSolved = false;
     }
 
 public:
@@ -49,10 +53,25 @@ public:
     }
 
     bool OnUserUpdate(float fElapsedTime) override {
-        if (GetKey(olc::Key::ENTER).bPressed) {
+            Clear(olc::BLACK);
+      if (GetKey(olc::Key::ENTER).bPressed) {
+        this->mazeSolved = true;
+      }
+        if (mazeSolved) {
             auto path = pathfinder.FindPath();
             for (int i = 0; i < grid.GetHeight(); i++) {
                 for (int j = 0; j < grid.GetWidth(); j++) {
+                if (grid.IsCellTraversable(grid.GetCellIndex(i, j))) {
+                    Draw(j, i, olc::GREY);
+                } else {
+                    Draw(j, i, olc::DARK_GREY);
+                }
+
+                if (i == start_i && j == start_j) {
+                    Draw(j, i, olc::MAGENTA);
+                } else if (i == goal_i && j == goal_j) {
+                    Draw(j, i, olc::YELLOW);
+                }
                     if (std::find(path.begin(), path.end(), grid.GetCellIndex(i, j)) != path.end()) {
                         Draw(j, i, olc::GREEN);
                     }
@@ -64,13 +83,45 @@ public:
                     }
                 }
             }
+        } else {
+        for (int i = 0; i < grid.GetHeight(); i++) {
+            for (int j = 0; j < grid.GetWidth(); j++) {
+                if (grid.IsCellTraversable(grid.GetCellIndex(i, j))) {
+                    Draw(j, i, olc::GREY);
+                } else {
+                    Draw(j, i, olc::DARK_GREY);
+                }
+
+                if (i == start_i && j == start_j) {
+                    Draw(j, i, olc::MAGENTA);
+                } else if (i == goal_i && j == goal_j) {
+                    Draw(j, i, olc::YELLOW);
+                }
+            }
+        }
+
+        }
+
+        if (GetKey(olc::Key::SPACE).bPressed) {
+          auto task = GenerateTask();
+          auto taskConfiguration = std::get<0>(task);
+          
+          this->start_i = taskConfiguration.start_i;
+          this->start_j = taskConfiguration.start_j;
+          this->goal_i = taskConfiguration.goal_i;
+          this->goal_j = taskConfiguration.goal_j;
+
+          this->grid = std::get<1>(task);
+
+          this->pathfinder = Pathfinder(taskConfiguration, this->grid);
+          mazeSolved = false;
         }
 
         return true;
     }
 };
 
-int main() {
+std::tuple<TaskConfiguration, Grid> GenerateTask() {
     const int WIDTH = 30;
     const int HEIGHT = 30;
 
@@ -103,15 +154,15 @@ int main() {
       4,
       1.0,
     };
-    // Print config to console
-    std::cout << "Config" << std::endl;
-    std::cout << "\tGrid: " << grid.GetWidth() << "x" << grid.GetHeight() << std::endl;
-    std::cout << "\tStart: " << taskConfiguration.start_i << ", " << taskConfiguration.start_j << std::endl;
-    std::cout << "\tGoal: " << taskConfiguration.goal_i << ", " << taskConfiguration.goal_j << std::endl;
-    std::cout << "\tMetric type: " << taskConfiguration.metricType << std::endl;
-    std::cout << "\tAlgorithm: " << taskConfiguration.algorithm << std::endl;
-    std::cout << "\tConnections: " << taskConfiguration.connections << std::endl;
-    std::cout << "\tHweight: " << taskConfiguration.hweight << std::endl << std::endl;
+
+  return {taskConfiguration, grid};
+}
+
+int main() {
+
+    auto task = GenerateTask();
+    auto taskConfiguration = std::get<0>(task);
+    auto grid = std::get<1>(task);
 
     Pathfinder pathfinder(taskConfiguration, grid);
 

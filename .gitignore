@@ -13,3 +13,4 @@ maze_generator/debug/
 maze_generator/target/
 maze_generator/Cargo.lock
 **/*.rs.bk
+Pathfinding
