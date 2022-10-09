@@ -1,9 +1,10 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.4)
 project(Pathfinding)
-
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_STANDARD 20)
 
 set(PROJECT_HEADERS
+        src/MazeGenerator.h
         src/tinyxml2.h
         src/olcPixelGameEngine.h
         src/Grid.h

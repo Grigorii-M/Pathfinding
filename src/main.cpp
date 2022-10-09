@@ -5,64 +5,11 @@
 #include <tuple>
 #include "Pathfinder.h"
 #include <utility>
-#include "../maze_generator/ffi/lib.rs.h"
+#include "MazeGenerator.h"
 
 #define OLC_PGE_APPLICATION
 
 #include "olcPixelGameEngine.h"
-
-/// Parse the XML file and return the task configuration and the grid
-std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
-    tinyxml2::XMLDocument doc;
-    doc.LoadFile(argv[1]);
-    auto root = doc.FirstChildElement();
-    auto start = root->FirstChildElement();
-    int start_i = start->IntAttribute("i");
-    int start_j = start->IntAttribute("j");
-
-    auto goal = start->NextSibling()->ToElement();
-    int goal_i = goal->IntAttribute("i");
-    int goal_j = goal->IntAttribute("j");
-
-    auto map = goal->NextSibling()->ToElement();
-    int width = map->IntAttribute("width");
-    int height = map->IntAttribute("height");
-
-    auto options = map->NextSibling()->ToElement();
-    std::string metricType = options->Attribute("metrictype");
-    std::string algorithm = options->Attribute("algorithm");
-    int connections = std::stoi(options->Attribute("connections"));
-    float hweight = std::stof(options->Attribute("hweight"));
-
-    TaskConfiguration taskConfiguration = {
-            start_i,
-            start_j,
-            goal_i,
-            goal_j,
-            metricType,
-            algorithm,
-            connections,
-            hweight
-    };
-
-    // Create a grid, fill it with obstacles
-    Grid grid(width, height, connections);
-    int i = 0;
-    for (auto row = map->FirstChildElement(); row != nullptr; row = row->NextSiblingElement(), i++) {
-        std::string values = row->GetText();
-        int j = 0;
-        for (char value: values) {
-            if (value == ' ') {
-                continue;
-            } else {
-                grid.SetCell(i, j, value != '1');
-            }
-            j++;
-        }
-    }
-
-    return std::make_tuple(taskConfiguration, grid);
-}
 
 /// This class is used to visualize the grid and the path
 class Application : public olc::PixelGameEngine {
@@ -88,13 +35,13 @@ public:
                 if (grid.IsCellTraversable(grid.GetCellIndex(i, j))) {
                     Draw(j, i, olc::GREY);
                 } else {
-                    Draw(j, i, olc::RED);
+                    Draw(j, i, olc::DARK_GREY);
                 }
 
                 if (i == start_i && j == start_j) {
                     Draw(j, i, olc::MAGENTA);
                 } else if (i == goal_i && j == goal_j) {
-                    Draw(j, i, olc::CYAN);
+                    Draw(j, i, olc::YELLOW);
                 }
             }
         }
@@ -123,16 +70,39 @@ public:
     }
 };
 
-int main(int argc, char **argv) {
-    if (argc < 2) {
-        std::cout << "Usage: " << argv[0] << " <document>" << std::endl;
-        return 1;
+int main() {
+    const int WIDTH = 30;
+    const int HEIGHT = 30;
+
+    srand(time(0));
+    auto maze = generateMaze(WIDTH, HEIGHT);
+    auto mazeCells = convertMaze(maze, WIDTH, HEIGHT);
+    Grid grid(WIDTH * 3, HEIGHT * 3, 4);
+
+    for (int i = 0; i < mazeCells.size(); i++) {
+      int x = i % (WIDTH * 3);
+      int y = i / (WIDTH * 3);
+
+      grid.SetCell(y, x, mazeCells[i]);
     }
 
-    auto data = ParseInput(argv);
-    auto taskConfiguration = std::get<0>(data);
-    auto grid = std::get<1>(data);
+    auto startEnd = GetStartEndPoints(mazeCells);
+    int start_i = std::get<0>(startEnd) / (HEIGHT * 3);
+    int start_j = std::get<0>(startEnd) % (HEIGHT * 3);
 
+    int end_i = std::get<1>(startEnd) / (HEIGHT * 3);
+    int end_j = std::get<1>(startEnd) % (HEIGHT * 3);
+
+    TaskConfiguration taskConfiguration = {
+      start_i,
+      start_j,
+      end_i,
+      end_j,
+      "Manhattan",
+      "AStar",
+      4,
+      1.0,
+    };
     // Print config to console
     std::cout << "Config" << std::endl;
     std::cout << "\tGrid: " << grid.GetWidth() << "x" << grid.GetHeight() << std::endl;
@@ -147,7 +117,7 @@ int main(int argc, char **argv) {
 
     Application app(pathfinder, grid, taskConfiguration.start_i, taskConfiguration.start_j, taskConfiguration.goal_i,
                     taskConfiguration.goal_j);
-    if (app.Construct(grid.GetWidth(), grid.GetHeight(), 5, 5))
+    if (app.Construct(grid.GetWidth(), grid.GetHeight(), 10, 10))
         app.Start();
 
     return 0;
