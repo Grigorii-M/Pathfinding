@@ -6,4 +6,6 @@
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
-compile_flags.txt
+compile_commands.json
+Pathfinding
+.cache/

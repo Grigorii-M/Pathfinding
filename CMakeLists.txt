@@ -1,20 +1,22 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.4)
 project(Pathfinding)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 23)
 
 set(PROJECT_HEADERS
-        tinyxml2.h
-        olcPixelGameEngine.h
-        Grid.h
-        Pathfinder.h
+        src/tinyxml2.h
+        src/olcPixelGameEngine.h
+        src/Grid.h
+        src/Pathfinder.h
         )
 
 set(PROJECT_SOURCES
-        main.cpp
-        tinyxml2.cpp
-        Grid.cpp
-        Pathfinder.cpp
+        src/main.cpp
+        src/tinyxml2.cpp
+        src/Grid.cpp
+        src/Pathfinder.cpp
         )
 
 add_executable(Pathfinding ${PROJECT_SOURCES} ${PROJECT_HEADERS})

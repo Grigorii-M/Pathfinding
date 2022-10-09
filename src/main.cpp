@@ -1,10 +1,11 @@
 #include <iostream>
 #include <string>
-#include "tinyxml2.h"
-#include "Grid.h"
 #include <tuple>
-#include "Pathfinder.h"
 #include <utility>
+
+#include "Grid.h"
+#include "Pathfinder.h"
+#include "tinyxml2.h"
 
 #define OLC_PGE_APPLICATION
 
@@ -33,24 +34,18 @@ std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
     int connections = std::stoi(options->Attribute("connections"));
     float hweight = std::stof(options->Attribute("hweight"));
 
-    TaskConfiguration taskConfiguration = {
-            start_i,
-            start_j,
-            goal_i,
-            goal_j,
-            metricType,
-            algorithm,
-            connections,
-            hweight
-    };
+    TaskConfiguration taskConfiguration = {start_i,     start_j,    goal_i,
+                                           goal_j,      metricType, algorithm,
+                                           connections, hweight};
 
     // Create a grid, fill it with obstacles
     Grid grid(width, height, connections);
     int i = 0;
-    for (auto row = map->FirstChildElement(); row != nullptr; row = row->NextSiblingElement(), i++) {
+    for (auto row = map->FirstChildElement(); row != nullptr;
+         row = row->NextSiblingElement(), i++) {
         std::string values = row->GetText();
         int j = 0;
-        for (char value: values) {
+        for (char value : values) {
             if (value == ' ') {
                 continue;
             } else {
@@ -65,7 +60,7 @@ std::tuple<TaskConfiguration, Grid> ParseInput(char **argv) {
 
 /// This class is used to visualize the grid and the path
 class Application : public olc::PixelGameEngine {
-private:
+   private:
     Pathfinder pathfinder;
     Grid grid;
     int start_i;
@@ -73,13 +68,19 @@ private:
     int goal_i;
     int goal_j;
 
-public:
-    Application(Pathfinder pathfinder, Grid grid, int start_i, int start_j, int goal_i, int goal_j) : pathfinder(
-            std::move(pathfinder)), grid(grid), start_i(start_i), start_j(start_j), goal_i(goal_i), goal_j(goal_j) {
+   public:
+    Application(Pathfinder pathfinder, Grid grid, int start_i, int start_j,
+                int goal_i, int goal_j)
+        : pathfinder(std::move(pathfinder)),
+          grid(grid),
+          start_i(start_i),
+          start_j(start_j),
+          goal_i(goal_i),
+          goal_j(goal_j) {
         sAppName = "Pathfinder";
     }
 
-public:
+   public:
     bool OnUserCreate() override {
         Clear(olc::BLACK);
         for (int i = 0; i < grid.GetHeight(); i++) {
@@ -105,7 +106,8 @@ public:
             auto path = pathfinder.FindPath();
             for (int i = 0; i < grid.GetHeight(); i++) {
                 for (int j = 0; j < grid.GetWidth(); j++) {
-                    if (std::find(path.begin(), path.end(), grid.GetCellIndex(i, j)) != path.end()) {
+                    if (std::find(path.begin(), path.end(),
+                                  grid.GetCellIndex(i, j)) != path.end()) {
                         Draw(j, i, olc::GREEN);
                     }
 
@@ -134,21 +136,25 @@ int main(int argc, char **argv) {
 
     // Print config to console
     std::cout << "Config" << std::endl;
-    std::cout << "\tGrid: " << grid.GetWidth() << "x" << grid.GetHeight() << std::endl;
-    std::cout << "\tStart: " << taskConfiguration.start_i << ", " << taskConfiguration.start_j << std::endl;
-    std::cout << "\tGoal: " << taskConfiguration.goal_i << ", " << taskConfiguration.goal_j << std::endl;
+    std::cout << "\tGrid: " << grid.GetWidth() << "x" << grid.GetHeight()
+              << std::endl;
+    std::cout << "\tStart: " << taskConfiguration.start_i << ", "
+              << taskConfiguration.start_j << std::endl;
+    std::cout << "\tGoal: " << taskConfiguration.goal_i << ", "
+              << taskConfiguration.goal_j << std::endl;
     std::cout << "\tMetric type: " << taskConfiguration.metricType << std::endl;
     std::cout << "\tAlgorithm: " << taskConfiguration.algorithm << std::endl;
-    std::cout << "\tConnections: " << taskConfiguration.connections << std::endl;
-    std::cout << "\tHweight: " << taskConfiguration.hweight << std::endl << std::endl;
+    std::cout << "\tConnections: " << taskConfiguration.connections
+              << std::endl;
+    std::cout << "\tHweight: " << taskConfiguration.hweight << std::endl
+              << std::endl;
 
     Pathfinder pathfinder(taskConfiguration, grid);
 
-    Application app(pathfinder, grid, taskConfiguration.start_i, taskConfiguration.start_j, taskConfiguration.goal_i,
+    Application app(pathfinder, grid, taskConfiguration.start_i,
+                    taskConfiguration.start_j, taskConfiguration.goal_i,
                     taskConfiguration.goal_j);
-    if (app.Construct(grid.GetWidth(), grid.GetHeight(), 5, 5))
-        app.Start();
+    if (app.Construct(grid.GetWidth(), grid.GetHeight(), 5, 5)) app.Start();
 
     return 0;
 }
-
