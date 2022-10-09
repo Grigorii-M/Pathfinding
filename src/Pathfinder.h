@@ -1,9 +1,10 @@
 #pragma once
 
-#include <string>
 #include <map>
-#include <vector>
 #include <optional>
+#include <string>
+#include <vector>
+
 #include "Grid.h"
 
 struct TaskConfiguration {
@@ -20,16 +21,16 @@ struct TaskConfiguration {
 };
 
 class Pathfinder {
-private:
+   private:
     Grid grid;
     TaskConfiguration taskConfiguration;
 
-public:
+   public:
     Pathfinder(TaskConfiguration taskConfiguration, const Grid &grid);
 
     std::vector<int> FindPath();
 
-private:
+   private:
     /// Traverse the grid and construct all parent-child relationships
     std::map<int, int> TraverseGrid();
 

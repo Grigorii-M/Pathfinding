@@ -1,11 +1,12 @@
+#include "Pathfinder.h"
+
+#include <cmath>
+#include <functional>
 #include <queue>
 #include <utility>
-#include "Pathfinder.h"
-#include <functional>
-#include <cmath>
 
-Pathfinder::Pathfinder(TaskConfiguration taskConfiguration, const Grid &grid) : grid(grid), taskConfiguration(
-        std::move(taskConfiguration)) {}
+Pathfinder::Pathfinder(TaskConfiguration taskConfiguration, const Grid &grid)
+    : grid(grid), taskConfiguration(std::move(taskConfiguration)) {}
 
 std::vector<int> Pathfinder::FindPath() {
     auto parents = TraverseGrid();
@@ -13,8 +14,10 @@ std::vector<int> Pathfinder::FindPath() {
 }
 
 std::map<int, int> Pathfinder::TraverseGrid() {
-    int start = grid.GetCellIndex(taskConfiguration.start_i, taskConfiguration.start_j);
-    int goal = grid.GetCellIndex(taskConfiguration.goal_i, taskConfiguration.goal_j);
+    int start =
+        grid.GetCellIndex(taskConfiguration.start_i, taskConfiguration.start_j);
+    int goal =
+        grid.GetCellIndex(taskConfiguration.goal_i, taskConfiguration.goal_j);
 
     // Determine heuristic function
     std::function<double(int, int)> heuristicFunction;
@@ -30,9 +33,10 @@ std::map<int, int> Pathfinder::TraverseGrid() {
             auto [i1, j1] = grid.GetCellCoordinates(cell1);
             auto [i2, j2] = grid.GetCellCoordinates(cell2);
 
-            return std::max(abs(i1 - i2), abs(j1 - j2)) + (sqrt(2) - 1) * std::min(abs(i1 - i2), abs(j1 - j2));
+            return std::max(abs(i1 - i2), abs(j1 - j2)) +
+                   (sqrt(2) - 1) * std::min(abs(i1 - i2), abs(j1 - j2));
         };
-    } else { // Manhattan
+    } else {  // Manhattan
         heuristicFunction = [&grid = this->grid](int cell1, int cell2) {
             auto [i1, j1] = grid.GetCellCoordinates(cell1);
             auto [i2, j2] = grid.GetCellCoordinates(cell2);
@@ -48,19 +52,23 @@ std::map<int, int> Pathfinder::TraverseGrid() {
     if (taskConfiguration.algorithm == "Dijkstra") {
         priorityFunction = [&cellCosts](int cell) { return cellCosts[cell]; };
     } else if (taskConfiguration.algorithm == "AStar") {
-        priorityFunction =
-                [&cellCosts, &goal, &hweight = this->taskConfiguration.hweight, &heuristicFunction](int cell) {
-                    return cellCosts[cell] + hweight * heuristicFunction(cell, goal);
-                };
-    } else { // BFS
+        priorityFunction = [&cellCosts, &goal,
+                            &hweight = this->taskConfiguration.hweight,
+                            &heuristicFunction](int cell) {
+            return cellCosts[cell] + hweight * heuristicFunction(cell, goal);
+        };
+    } else {  // BFS
         priorityFunction = [&bfsOrder](int cell) { return bfsOrder++; };
     }
 
-    auto comparator = [&](std::tuple<int, double> a, std::tuple<int, double> b) {
+    auto comparator = [&](std::tuple<int, double> a,
+                          std::tuple<int, double> b) {
         return std::get<1>(a) > std::get<1>(b);
     };
 
-    auto queue = std::priority_queue<std::tuple<int, double>, std::vector<std::tuple<int, double>>, decltype(comparator)>{comparator};
+    auto queue = std::priority_queue<std::tuple<int, double>,
+                                     std::vector<std::tuple<int, double>>,
+                                     decltype(comparator)>{comparator};
 
     queue.push(std::make_tuple(start, priorityFunction(start)));
 
@@ -79,10 +87,12 @@ std::map<int, int> Pathfinder::TraverseGrid() {
             break;
         }
 
-        for (int next: grid.GetNeighbors(current)) {
+        for (int next : grid.GetNeighbors(current)) {
             double cost = cellCosts[current] + grid.Cost(current, next);
 
-            if (grid.IsCellTraversableFrom(current, next) && (cellCosts.find(next) == cellCosts.end() || cost < cellCosts[next])) {
+            if (grid.IsCellTraversableFrom(current, next) &&
+                (cellCosts.find(next) == cellCosts.end() ||
+                 cost < cellCosts[next])) {
                 cellCosts[next] = cost;
                 queue.push(std::make_tuple(next, priorityFunction(next)));
                 parents[next] = current;
@@ -90,12 +100,13 @@ std::map<int, int> Pathfinder::TraverseGrid() {
         }
     }
 
-    return std::map<int, int> {parents};
+    return std::map<int, int>{parents};
 }
 
 std::vector<int> Pathfinder::ReconstructPath(std::map<int, int> parents) {
     std::vector<int> path;
-    int current = grid.GetCellIndex(taskConfiguration.goal_i, taskConfiguration.goal_j);
+    int current =
+        grid.GetCellIndex(taskConfiguration.goal_i, taskConfiguration.goal_j);
     while (current != -1) {
         path.push_back(current);
         if (parents.find(current) == parents.end()) {

@@ -1,28 +1,23 @@
-#include <vector>
-#include <iostream>
-#include <cmath>
-#include <tuple>
 #include "Grid.h"
 
-Grid::Grid(int width, int height, int neighborsCount) : width(width), height(height),
-                                                         neighborsCount(neighborsCount) {
+#include <cmath>
+#include <iostream>
+#include <tuple>
+#include <vector>
+
+Grid::Grid(int width, int height, int neighborsCount)
+    : width(width), height(height), neighborsCount(neighborsCount) {
     data = new bool[width * height];
     for (int i = 0; i < width * height; i++) {
         data[i] = true;
     }
 }
 
-int Grid::GetWidth() const {
-    return width;
-}
+int Grid::GetWidth() const { return width; }
 
-int Grid::GetHeight() const {
-    return height;
-}
+int Grid::GetHeight() const { return height; }
 
-bool Grid::IsCellTraversable(int cell) const {
-    return data[cell];
-}
+bool Grid::IsCellTraversable(int cell) const { return data[cell]; }
 
 bool Grid::IsCellTraversableFrom(int curr, int next) const {
     bool destinationIsTraversable = data[next];
@@ -52,9 +47,7 @@ bool Grid::IsCellTraversableFrom(int curr, int next) const {
     return true;
 }
 
-void Grid::SetCell(int i, int j, bool value) {
-    data[i * width + j] = value;
-}
+void Grid::SetCell(int i, int j, bool value) { data[i * width + j] = value; }
 
 // Return indices of neighbors of the cell
 std::vector<int> Grid::GetNeighbors(int cell) const {
@@ -105,9 +98,7 @@ std::vector<int> Grid::GetNeighbors(int cell) const {
     return neighbors;
 }
 
-int Grid::GetCellIndex(int i, int j) const {
-    return i * width + j;
-}
+int Grid::GetCellIndex(int i, int j) const { return i * width + j; }
 
 double Grid::Cost(int cell1, int cell2) const {
     int x1 = cell1 % width;

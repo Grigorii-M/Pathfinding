@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(PROJECT_HEADERS
         src/MazeGenerator.h
-        src/tinyxml2.h
         src/olcPixelGameEngine.h
         src/Grid.h
         src/Pathfinder.h
@@ -13,7 +12,6 @@ set(PROJECT_HEADERS
 
 set(PROJECT_SOURCES
         src/main.cpp
-        src/tinyxml2.cpp
         src/Grid.cpp
         src/Pathfinder.cpp
         )

@@ -3,13 +3,13 @@
 #include <vector>
 
 class Grid {
-private:
-    int width; // j
-    int height; // i
-    bool *data; // true - traversable, false - obstacle
-    int neighborsCount; // how many neighbors each cell has
+   private:
+    int width;           // j
+    int height;          // i
+    bool *data;          // true - traversable, false - obstacle
+    int neighborsCount;  // how many neighbors each cell has
 
-public:
+   public:
     Grid(int width, int height, int neighborsCount);
 
     [[nodiscard]] int GetWidth() const;
